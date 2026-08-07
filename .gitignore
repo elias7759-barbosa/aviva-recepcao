@@ -1,0 +1,12 @@
+# Segredo NENHUM em arquivo (07/ago/2026): endereço do banco de dados e
+# código do aparelho não vivem mais em config.local.js — foram removidos
+# do repositório. Se algum dia alguém recriar um arquivo de override local
+# para teste pessoal, a regra abaixo evita que ele suba por engano.
+*.local.js
+
+# Lixo do macOS
+.DS_Store
+
+# Testes e temporários
+*.log
+_teste*
