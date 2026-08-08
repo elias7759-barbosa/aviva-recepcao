@@ -4,6 +4,7 @@ const fs = require('fs');
 const assert = require('assert');
 
 const html = fs.readFileSync(__dirname + '/../index.html', 'utf8');
+const antuerpiaPath = __dirname + '/../antuerpia/index.html';
 
 const checks = [
   ['três classificações ministeriais existem', () => {
@@ -57,6 +58,12 @@ const checks = [
   ['modo Antuérpia desativa o selo e oculta a troca de sede', () => {
     assert.match(html, /sede-badge[^\n]+disabled = sedeEstaTravada\(\)/);
     assert.match(html, /settings-troca-sede[^\n]+classList\.toggle\("oculto", sedeEstaTravada\(\)\)/);
+  }],
+  ['URL dedicada de Antuérpia reutiliza a aplicação principal', () => {
+    assert.ok(fs.existsSync(antuerpiaPath));
+    const entrada = fs.readFileSync(antuerpiaPath, 'utf8');
+    assert.match(entrada, /\.\.\/\?terminal=antuerpia/);
+    assert.doesNotMatch(entrada, /id="cadastro-form"/);
   }]
 ];
 
