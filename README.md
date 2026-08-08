@@ -261,7 +261,7 @@ preenche sozinho (não vêm de tela nenhuma):
 | `enviado_via`                                    | `ONLINE`/`FILA_OFFLINE` conforme `navigator.onLine` no instante do cadastro, congelado    |
 | `id_cliente_uuid`                                | UUID v4 gerado no aparelho — chave de idempotência do servidor                            |
 | `declaracao_maioridade` / `consentimento_aceite` | `SIM` (única forma de o formulário liberar o envio)                                       |
-| `consentimento_versao_exibida`                   | `PT-v3-2026-08`                                                                           |
+| `consentimento_versao_exibida`                   | `PT-v4-2026-08`                                                                           |
 
 Se o contrato mudar de novo, o único lugar a tocar é o objeto
 `CONFIG.FIELDS`/`CONFIG.CONSENT` no topo do JS.
@@ -285,14 +285,14 @@ terminal físico ainda) — a tela mostra só "Outra" nesse caso, sem quebrar.
 
 ## Texto de consentimento
 
-Versão **`PT-v3-2026-08`** de
+Versão **`PT-v4-2026-08`** de
 `ecossistema-ministerial/texto-consentimento.md` (Agostinho, 07/ago/2026,
 com BCE `0887 664 321` e endereço do Kinepolis já confirmados pelo Pastor)
 — citado tal como escrito, sem resumo nem reescrita. O terminal mostra as
 **duas ações completas exigidas para o canal "terminal de recepção"**
 (§1): declaração de maioridade + consentimento de dados, cada uma com sua
 própria caixa, mais o bloco de identificação do responsável pelo
-tratamento (Aviva Church ASBL, endereço, canal `dados@avivachurch.be`).
+tratamento (Aviva Church ASBL, endereço, canal `avivachurch.infra@gmail.com`).
 
 **Correção 07/ago/2026 (2 frases, pedido do Pastor):**
 
