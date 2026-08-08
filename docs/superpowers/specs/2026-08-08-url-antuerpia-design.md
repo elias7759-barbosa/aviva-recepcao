@@ -1,6 +1,6 @@
 # URL dedicada e travada para Antuérpia
 
-**Data:** 08/08/2026  
+**Data:** 08/08/2026
 **Estado:** aprovado pelo Pastor Elias para implementação
 
 ## Objetivo
