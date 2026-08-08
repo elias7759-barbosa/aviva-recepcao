@@ -8,6 +8,8 @@
 
 **Tech Stack:** HTML, CSS e JavaScript sem framework; Node.js para testes locais; GitHub Pages.
 
+**Execution status:** concluído localmente em 08/08/2026. Frontend: 14/14 testes; backend: 80/80 testes; conferência visual realizada nas duas entradas sem envio de cadastro.
+
 ## Global Constraints
 
 - Sem framework, build ou CDN externa.
