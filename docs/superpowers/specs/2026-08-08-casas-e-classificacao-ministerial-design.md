@@ -16,11 +16,12 @@ Permitir que a recepção registre uma casa e seus integrantes de modo visualmen
 |---|---|---|
 | Criança | 0–10 anos | Integrante vinculado ao responsável |
 | Adolescente | 11–14 anos | Integrante vinculado ao responsável |
-| Jovem solteiro | 15 anos ou mais, sem limite máximo | Cadastro próprio |
+| Jovem menor | 15–17 anos | Integrante vinculado ao responsável |
+| Jovem adulto solteiro | 18 anos ou mais, sem limite máximo | Cadastro próprio |
 | Jovem casado | Casado e ligado ministerialmente aos jovens | Cadastro próprio e nova casa |
 | Casado | Casado, fora da classificação jovem | Cadastro próprio e nova casa |
 
-Um jovem solteiro com 18 anos ou mais recebe cadastro próprio mesmo quando chega com os pais. Uma pessoa casada nunca entra como integrante subordinado à casa dos pais.
+Uma pessoa com 18 anos ou mais recebe cadastro próprio. Uma pessoa casada nunca entra como integrante subordinado à casa dos pais.
 
 ### 2.2 Classificação feita pela recepção
 
@@ -37,8 +38,9 @@ O visitante não precisa escolher essa classificação. O agente futuro não cal
 - O contato principal da casa possui telefone obrigatório.
 - Criança não terá telefone usado para mensagens automáticas.
 - Adolescente pode ter telefone opcionalmente registrado.
-- O telefone do adolescente nasce com `envio_automatico_permitido=NAO` e `autorizacao_responsavel=PENDENTE`.
-- O agente futuro nunca envia diretamente ao adolescente nessa condição.
+- O telefone de qualquer menor nasce no banco com `envio_automatico_permitido=NAO` e `autorizacao_responsavel=PENDENTE`.
+- Essa trava é interna e só fica disponível ao futuro agente e à administração; ela não aparece na ficha da recepção.
+- O agente futuro nunca envia diretamente ao menor nessa condição.
 - Uma pessoa da Aviva poderá conversar posteriormente com os pais e registrar autorização específica; esse fluxo não pertence a esta implementação inicial.
 - Jovem com cadastro próprio pode ser destinatário, desde que o consentimento do próprio titular esteja válido.
 
@@ -51,8 +53,8 @@ Exemplo:
 | id_familia | papel_na_casa | nome | categoria | idade | telefone | envio automático |
 |---|---|---|---|---:|---|---|
 | FAM-BXL-000001 | PRINCIPAL | Carlos Silva | CASADO | 38 | +32… | conforme consentimento |
-| FAM-BXL-000001 | INTEGRANTE | Pedro Silva | ADOLESCENTE | 13 | +32… | NÃO |
-| FAM-BXL-000001 | INTEGRANTE | Ana Silva | CRIANCA | 8 | — | NÃO |
+| FAM-BXL-000001 | INTEGRANTE | Pedro Silva | ADOLESCENTE | 13 | +32… | NÃO (interno) |
+| FAM-BXL-000001 | INTEGRANTE | Ana Silva | CRIANCA | 8 | — | NÃO (interno) |
 | FAM-BXL-000002 | PRINCIPAL | Lucas Santos | JOVEM | 22 | +32… | conforme consentimento |
 | FAM-BXL-000003 | PRINCIPAL | João Souza | JOVEM_CASADO | 24 | +32… | conforme consentimento |
 
@@ -77,10 +79,9 @@ O bloco hoje chamado “Membros da Família” continuará visualmente simples e
 - nome;
 - idade;
 - telefone opcional;
-- categoria calculada pela idade para 0–14 anos;
-- indicação visível de que telefone de adolescente não autoriza mensagem automática.
+- categoria calculada pela idade para 0–17 anos.
 
-O bloco aceitará somente crianças e adolescentes. Ao informar idade igual ou superior a 15 anos, a ficha orientará a fazer um cadastro próprio, sem gravar essa pessoa como integrante subordinado.
+O bloco aceitará somente menores de 18 anos: crianças, adolescentes e jovens de 15–17 anos. Ao informar idade igual ou superior a 18 anos, a ficha orientará a fazer um cadastro próprio, sem gravar essa pessoa como integrante subordinado.
 
 ## 5. Contrato de dados
 
@@ -115,14 +116,14 @@ Exemplos de composição:
 - principal `JOVEM` → boas-vindas + informação do grupo de jovens;
 - principal `JOVEM_CASADO` → boas-vindas + informação adequada aos jovens casados, sem dedução automática adicional.
 
-Os integrantes nunca serão destinatários por simples presença na casa. Um adolescente com telefone continua bloqueado até autorização posterior registrada por uma pessoa da Aviva.
+Os integrantes nunca serão destinatários por simples presença na casa. Todo menor com telefone continua bloqueado internamente até autorização posterior registrada por uma pessoa da Aviva; essa informação não aparece na ficha.
 
 ## 7. Segurança e GDPR
 
 - O consentimento deve explicar que nome, idade e telefone opcional dos integrantes serão usados para organizar o acolhimento familiar e apresentar ministérios adequados ao contato principal.
-- Telefone de adolescente não equivale a autorização de contato.
+- Telefone de menor não equivale a autorização de contato.
 - Toda linha deve herdar o vínculo com a prova de consentimento do cadastro principal, sem fingir consentimento individual do integrante.
-- A futura autorização de contato direto ao adolescente será registro separado, específico, datado e revogável.
+- A futura autorização de contato direto ao menor será registro separado, específico, datado e revogável.
 - Observações livres não serão repassadas ao futuro agente.
 - Exportação de emergência em texto puro será reavaliada antes da produção.
 
@@ -134,8 +135,8 @@ A classificação ministerial ficará no final da ficha, com três botões grand
 
 ## 9. Erros e mensagens
 
-- Idade de integrante 15+ → “Esta pessoa precisa de um cadastro próprio.”
-- Adolescente com telefone → aviso “Telefone registrado; envio automático bloqueado até autorização do responsável.”
+- Idade de integrante 18+ → “Esta pessoa precisa de um cadastro próprio.”
+- Telefone de menor → aceito sem exibir na ficha o estado interno de bloqueio para mensagens.
 - Falha parcial no servidor → registro permanece na fila e o servidor completa a casa no reenvio.
 - Token revogado → um único código canônico entre contrato, backend e frontend, com alerta visível.
 - Campo fechado inválido → servidor recusa sem gravar nenhuma linha nova.
@@ -145,21 +146,22 @@ A classificação ministerial ficará no final da ficha, com três botões grand
 1. Principal sem integrantes.
 2. Principal com criança.
 3. Principal com adolescente sem telefone.
-4. Principal com adolescente com telefone e bloqueio de envio.
-5. Tentativa de incluir integrante de 15+ recusada e orientada para cadastro próprio.
-6. Jovem solteiro em cadastro próprio.
-7. Jovem casado em cadastro próprio.
-8. Casado em cadastro próprio.
-9. Família gravada em linhas consecutivas com o mesmo `id_familia`.
-10. Falha entre linhas + reenvio completa a casa sem duplicação ou perda.
-11. Fluxo offline → reconexão → planilha no MacBook real.
-12. Confirmação de que nenhum telefone de adolescente chega à futura fila do agente.
+4. Principal com adolescente com telefone e bloqueio interno de envio, sem aviso visível na ficha.
+5. Jovem de 15–17 anos vinculado à família.
+6. Tentativa de incluir integrante de 18+ recusada e orientada para cadastro próprio.
+7. Jovem adulto solteiro em cadastro próprio.
+8. Jovem casado em cadastro próprio.
+9. Casado em cadastro próprio.
+10. Família gravada em linhas consecutivas com o mesmo `id_familia`.
+11. Falha entre linhas + reenvio completa a casa sem duplicação ou perda.
+12. Fluxo offline → reconexão → planilha no MacBook real.
+13. Confirmação de que nenhum telefone de menor chega à futura fila do agente sem autorização posterior.
 
 ## 11. Fora de escopo desta fase
 
 - envio real pelo WhatsApp Business;
 - modelos finais das mensagens;
 - conversa pastoral para distinguir situações não registradas;
-- autorização posterior para contato direto de adolescentes;
+- autorização posterior para contato direto de menores;
 - inclusão automática em grupos;
 - decisões automáticas do agente sobre estado civil ou classificação ministerial.
