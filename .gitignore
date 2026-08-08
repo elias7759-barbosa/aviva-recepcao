@@ -10,3 +10,4 @@
 # Testes e temporários
 *.log
 _teste*
+.worktrees/
