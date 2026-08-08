@@ -1133,7 +1133,7 @@
         </p>
         <p id="settings-endpoint-info" class="field-hint"></p>
 
-        <details>
+        <details id="settings-troca-sede">
           <summary>Trocar a sede deste aparelho</summary>
           <div class="warn">
             Só faça isso se este Mac foi realmente emprestado para outra sede. A
@@ -1720,6 +1720,24 @@
           return null;
         }
 
+        function getModoTerminal() {
+          return window.location.search.indexOf("terminal=antuerpia") !== -1
+            ? "antuerpia"
+            : "principal";
+        }
+
+        function sedeEstaTravada() {
+          return getModoTerminal() === "antuerpia";
+        }
+
+        function getSedesPermitidas() {
+          return CONFIG.SEDES.filter(function (sede) {
+            return sedeEstaTravada()
+              ? sede.id === "antuerpia"
+              : sede.id !== "antuerpia";
+          });
+        }
+
         function mostrarModal(id) {
           $(id).classList.remove("oculto");
         }
@@ -1761,10 +1779,20 @@
   ===================================================================== */
 
         function getSedeAtualId() {
-          return localStorage.getItem(CONFIG.STORAGE_KEYS.SEDE) || "";
+          if (sedeEstaTravada()) {
+            return "antuerpia";
+          }
+          var salva = localStorage.getItem(CONFIG.STORAGE_KEYS.SEDE) || "";
+          return getSedesPermitidas().some(function (sede) {
+            return sede.id === salva;
+          })
+            ? salva
+            : "";
         }
         function setSedeAtualId(id) {
-          localStorage.setItem(CONFIG.STORAGE_KEYS.SEDE, id);
+          if (!sedeEstaTravada()) {
+            localStorage.setItem(CONFIG.STORAGE_KEYS.SEDE, id);
+          }
         }
 
         function getDispositivoId() {
@@ -2071,7 +2099,7 @@
 
         function popularSelectSedes(selectEl) {
           selectEl.innerHTML = "";
-          CONFIG.SEDES.forEach(function (sede) {
+          getSedesPermitidas().forEach(function (sede) {
             var opt = document.createElement("option");
             opt.value = sede.id;
             opt.textContent = sede.nome;
@@ -2082,6 +2110,8 @@
         function renderSedeBadge() {
           var sede = getSedeById(getSedeAtualId());
           $("sede-badge").textContent = sede ? sede.nome : "—";
+          $("sede-badge").disabled = sedeEstaTravada();
+          $("settings-troca-sede").classList.toggle("oculto", sedeEstaTravada());
           $("confirm-sede").textContent = sede ? sede.nome : "—";
           $("settings-sede-atual").textContent = sede ? sede.nome : "—";
           $("settings-dispositivo-id").textContent = getDispositivoId();
@@ -3031,6 +3061,9 @@
             mostrarModal("modal-settings");
           });
           $("sede-badge").addEventListener("click", function () {
+            if (sedeEstaTravada()) {
+              return;
+            }
             renderSedeBadge();
             $("settings-sede-select").value = getSedeAtualId();
             mostrarModal("modal-settings");
