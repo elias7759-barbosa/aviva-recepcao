@@ -274,7 +274,7 @@ preenche sozinho (não vêm de tela nenhuma):
 | `enviado_via`                                    | `ONLINE`/`FILA_OFFLINE` conforme `navigator.onLine` no instante do cadastro, congelado    |
 | `id_cliente_uuid`                                | UUID v4 gerado no aparelho — chave de idempotência do servidor                            |
 | `declaracao_maioridade` / `consentimento_aceite` | `SIM` (única forma de o formulário liberar o envio)                                       |
-| `consentimento_versao_exibida`                   | `PT-v4-2026-08`                                                                           |
+| `consentimento_versao_exibida`                   | `PT-v5-2026-08`                                                                           |
 
 Se o contrato mudar de novo, o único lugar a tocar é o objeto
 `CONFIG.FIELDS`/`CONFIG.CONSENT` no topo do JS.
@@ -298,7 +298,7 @@ terminal físico ainda) — a tela mostra só "Outra" nesse caso, sem quebrar.
 
 ## Texto de consentimento
 
-Versão **`PT-v4-2026-08`** de
+Versão **`PT-v5-2026-08`** de
 `ecossistema-ministerial/texto-consentimento.md` (Agostinho, 07/ago/2026,
 com BCE `0887 664 321` e endereço do Kinepolis já confirmados pelo Pastor)
 — citado tal como escrito, sem resumo nem reescrita. O terminal mostra as
