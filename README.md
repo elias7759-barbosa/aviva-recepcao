@@ -1,9 +1,21 @@
 # Terminal de Recepção "Bem-vindos" — Aviva Church
 
 Página para cadastrar visitantes na recepção de cada sede, feita para abrir
-em **qualquer aparelho** (iPad, celular, o Mac da recepção) por um único
-endereço na internet. **Não é o site avivachurch.be** — é uma página à parte,
+em **qualquer aparelho** (iPad, celular, o Mac da recepção) pelos endereços
+operacionais abaixo. **Não é o site avivachurch.be** — é uma página à parte,
 publicada no GitHub Pages.
+
+## Endereços operacionais
+
+- **Bruxelas / Namur:** `https://elias7759-barbosa.github.io/aviva-recepcao/`
+  — o selo superior permite alternar somente entre essas duas sedes, com
+  confirmação pelo nome.
+- **Antuérpia:**
+  `https://elias7759-barbosa.github.io/aviva-recepcao/antuerpia/`
+  — abre permanentemente como Antuérpia e não oferece troca de sede.
+
+Os dois endereços usam a mesma aplicação. Não existe uma cópia independente
+da ficha de Antuérpia; portanto, correções futuras valem para as duas entradas.
 
 ## O que é / o que não é
 
@@ -11,8 +23,8 @@ publicada no GitHub Pages.
   de marca também embutidas em base64), mais um arquivo de dados ao lado:
   `comunas-por-sede.data.js`/`comunas-por-sede.json` (listas de comuna,
   públicas, sem nada sensível).
-- **Publicado no GitHub Pages (07/ago/2026)** — um único endereço na
-  internet, aberto em HTTPS de qualquer aparelho (iPad, celular, notebook),
+- **Publicado no GitHub Pages (07/ago/2026)** — entradas HTTPS para a mesma
+  aplicação, abertas em qualquer aparelho (iPad, celular, notebook),
   sem precisar copiar pasta para cada máquina. Continua funcionando também
   local, no Mac, via `abrir-recepcao-bem-vindos.command` (ver "Modo de
   contingência local" abaixo).
@@ -46,7 +58,9 @@ precisar citar um exemplo de URL neste README, o marcador é sempre
 
 1. Abra o endereço do terminal no navegador do aparelho (link enviado pelo
    Wesley/Agostinho — funciona em iPad, celular, notebook).
-2. Escolha a **sede** e digite o nome dela para confirmar.
+2. Na URL principal, escolha **Bruxelas** ou **Namur** e digite o nome para
+   confirmar. Na URL de Antuérpia, a sede já vem definida e não pode ser
+   trocada.
 3. Cole o **endereço do banco de dados** e o **código deste aparelho** — os
    dois foram te passados junto com o link. Cole com cuidado, sem espaço a
    mais.
@@ -106,11 +120,10 @@ ficar online.
    são atos jurídicos diferentes): declaração de maioridade + consentimento
    de dados. As duas vêm desmarcadas; o formulário fica travado até ambas
    serem marcadas.
-3. Preenche nome, telefone (código de país livre — ver seção própria
-   abaixo), e-mail (opcional), se é a primeira visita, categoria, comuna de
-   residência (lista oficial da sede + "Outra") e idioma. Em "Mais
-   informações (opcional)": como conheceu a igreja, convidado por, quem
-   atendeu, observações.
+3. Preenche nome, telefone, primeira visita, comuna e os menores da mesma
+   família. Depois vêm e-mail opcional, categoria, idioma, observações e a
+   classificação organizacional. Cada menor pode ter nome, idade e telefone
+   opcional, sempre ligado ao adulto principal da casa.
 4. Toca em "Revisar e cadastrar" → aparece a tela **"Cadastrar em
    \<SEDE\> — confirma?"** com o resumo.
 5. Confirma → grava na hora, localmente, com um UUID próprio
