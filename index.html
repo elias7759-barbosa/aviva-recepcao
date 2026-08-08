@@ -192,6 +192,16 @@
         flex: 0 0 96px;
         min-width: 96px;
       }
+      .familia-linha .familia-telefone {
+        flex: 1;
+        min-width: 180px;
+      }
+      .classificacao-opcoes {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px;
+      }
+      .classificacao-opcoes .toggle-btn { min-height: 56px; }
 
       .screen {
         min-height: 100vh;
@@ -1018,15 +1028,24 @@
             <div class="field" id="field-familia">
               <label>Membros da Família</label>
               <p class="field-hint" style="margin: -2px 0 10px 0">
-                Nome e idade de quem vier junto (cônjuge, filhos etc.). Preencha
+                Nome, idade e telefone opcional dos menores. Preencha
                 uma linha — a próxima aparece sozinha.
               </p>
-              <div id="familia-lista"></div>
+              <div id="familia-lista" data-max-idade="17"></div>
             </div>
 
             <div class="field" style="margin-bottom: 0">
               <label for="f-observacoes">Observações (opcional)</label>
               <textarea id="f-observacoes"></textarea>
+            </div>
+
+            <div class="field" id="field-classificacao">
+              <label>Classificação ministerial *</label>
+              <div class="classificacao-opcoes">
+                <button type="button" class="toggle-btn classificacao-btn" data-value="JOVEM" value="JOVEM">Jovem</button>
+                <button type="button" class="toggle-btn classificacao-btn" data-value="JOVEM_CASADO" value="JOVEM_CASADO">Jovem casado</button>
+                <button type="button" class="toggle-btn classificacao-btn" data-value="CASADO" value="CASADO">Casado</button>
+              </div>
             </div>
 
             <button type="submit" class="btn-primary" id="btn-submit" disabled>
@@ -1527,8 +1546,9 @@
             consentimentoAceite: "consentimento_aceite",
             consentimentoVersaoExibida: "consentimento_versao_exibida",
             observacoes: "observacoes",
-            // -------- Membros da Família (§2-bis) --------
-            membrosFamilia: "membros_familia",
+            idFamiliaCliente: "id_familia_cliente",
+            classificacaoMinisterial: "classificacao_ministerial",
+            integrantesFamilia: "integrantes_familia",
           },
 
           // -------- Texto de consentimento — texto-consentimento.md, versão PT-v4-2026-08
@@ -2259,7 +2279,7 @@
        é só ignorada no payload. -------- */
         var OPCOES_IDADE_HTML = (function () {
           var html = '<option value="">Idade</option>';
-          for (var i = 0; i <= 99; i++) {
+          for (var i = 0; i <= 17; i++) {
             html += '<option value="' + i + '">' + i + "</option>";
           }
           return html;
@@ -2270,7 +2290,7 @@
           var linhas = [];
 
           function linhaVazia(l) {
-            return !l.nomeEl.value.trim() && !l.idadeEl.value;
+            return !l.nomeEl.value.trim() && !l.idadeEl.value && !l.telefoneEl.value.trim();
           }
 
           function aoMudarLinha(linha) {
@@ -2289,19 +2309,24 @@
               '<select class="familia-idade">' +
               OPCOES_IDADE_HTML +
               "</select>" +
+              '<input type="tel" class="familia-telefone" placeholder="Telefone (opcional)" autocomplete="tel">' +
               '<button type="button" class="icon-btn familia-remover" aria-label="Remover linha">✕</button>';
             container.appendChild(div);
 
             var nomeEl = div.querySelector(".familia-nome");
             var idadeEl = div.querySelector(".familia-idade");
+            var telefoneEl = div.querySelector(".familia-telefone");
             var removerBtn = div.querySelector(".familia-remover");
-            var linha = { id: id, nomeEl: nomeEl, idadeEl: idadeEl };
+            var linha = { id: id, nomeEl: nomeEl, idadeEl: idadeEl, telefoneEl: telefoneEl };
             linhas.push(linha);
 
             nomeEl.addEventListener("input", function () {
               aoMudarLinha(linha);
             });
             idadeEl.addEventListener("change", function () {
+              aoMudarLinha(linha);
+            });
+            telefoneEl.addEventListener("input", function () {
               aoMudarLinha(linha);
             });
             removerBtn.addEventListener("click", function () {
@@ -2318,7 +2343,8 @@
           function getValidas() {
             return linhas
               .map(function (l) {
-                return { nome: l.nomeEl.value.trim(), idade: l.idadeEl.value };
+                var bruto = l.telefoneEl.value.trim();
+                return { nome: l.nomeEl.value.trim(), idade: l.idadeEl.value, telefoneBruto: bruto, telefoneE164: normalizarTelefone(bruto) };
               })
               .filter(function (l) {
                 return l.nome && l.idade !== "";
@@ -2336,6 +2362,7 @@
         }
 
         var familia = criarGerenciadorFamilia("familia-lista");
+        var classificacaoMinisterialValor = "";
 
         function formularioValido() {
           if (!$("consent-maioridade").checked) {
@@ -2357,6 +2384,9 @@
             return false;
           }
           if (!$("f-idioma").value) {
+            return false;
+          }
+          if (!classificacaoMinisterialValor) {
             return false;
           }
           var comuna = $("f-comuna").value;
@@ -2390,6 +2420,10 @@
           $("form-fields").disabled = true;
           $("f-telefone").value = CONFIG.TELEFONE_PADRAO + " ";
           primeiraVisitaValor = "";
+          classificacaoMinisterialValor = "";
+          Array.prototype.forEach.call(document.querySelectorAll(".classificacao-btn"), function (btn) {
+            btn.classList.remove("ativo");
+          });
           $("pv-sim").classList.remove("ativo");
           $("pv-nao").classList.remove("ativo");
           familia.limpar();
@@ -2432,6 +2466,7 @@
             idioma: $("f-idioma").value,
             categoria: $("f-categoria").value,
             primeiraVisita: primeiraVisitaValor,
+            classificacaoMinisterial: classificacaoMinisterialValor,
             observacoes: observacoesFinal,
             sedeNome: sede ? sede.nome : "",
             familia: familia.getValidas(),
@@ -2456,6 +2491,9 @@
             "<dt>Categoria</dt><dd>" +
             escapeHtml(rascunhoAtual.categoria) +
             "</dd>" +
+            "<dt>Classificação ministerial</dt><dd>" +
+            escapeHtml(rascunhoAtual.classificacaoMinisterial) +
+            "</dd>" +
             "<dt>Comuna de residência</dt><dd>" +
             escapeHtml(rascunhoAtual.comuna) +
             "</dd>" +
@@ -2467,7 +2505,8 @@
                 rascunhoAtual.familia
                   .map(function (m) {
                     return (
-                      escapeHtml(m.nome) + " (" + escapeHtml(m.idade) + ")"
+                      escapeHtml(m.nome) + " (" + escapeHtml(m.idade) + " anos)" +
+                      (m.telefoneBruto ? " — " + escapeHtml(m.telefoneBruto) : "")
                     );
                   })
                   .join(", ") +
@@ -2506,11 +2545,13 @@
           payload[F.consentimentoAceite] = "SIM";
           payload[F.consentimentoVersaoExibida] = CONFIG.CONSENT.versao;
           payload[F.observacoes] = rascunhoAtual.observacoes;
+          payload[F.idFamiliaCliente] = uuidv4();
+          payload[F.classificacaoMinisterial] = rascunhoAtual.classificacaoMinisterial;
           // Membros da Família: array {nome, idade_declarada} dentro do
           // MESMO POST (contrato §2-bis, reescrito 06/ago) — não é um
           // cadastro/endpoint separado.
-          payload[F.membrosFamilia] = rascunhoAtual.familia.map(function (m) {
-            return { nome: m.nome, idade_declarada: parseInt(m.idade, 10) };
+          payload[F.integrantesFamilia] = rascunhoAtual.familia.map(function (m) {
+            return { nome: m.nome, idade_declarada: parseInt(m.idade, 10), telefone_bruto: m.telefoneBruto, telefone_e164: m.telefoneE164 };
           });
 
           var registro = {
@@ -2944,6 +2985,16 @@
           $("f-nome").addEventListener("input", atualizarEstadoSubmit);
           $("f-categoria").addEventListener("change", atualizarEstadoSubmit);
           $("f-idioma").addEventListener("change", atualizarEstadoSubmit);
+
+          Array.prototype.forEach.call(document.querySelectorAll(".classificacao-btn"), function (btn) {
+            btn.addEventListener("click", function () {
+              classificacaoMinisterialValor = btn.getAttribute("data-value");
+              Array.prototype.forEach.call(document.querySelectorAll(".classificacao-btn"), function (outro) {
+                outro.classList.toggle("ativo", outro === btn);
+              });
+              atualizarEstadoSubmit();
+            });
+          });
 
           // -------- Membros da Família: linhas nascem sozinhas por digitação
           // (criarGerenciadorFamilia já cuida disso na criação de "familia";
