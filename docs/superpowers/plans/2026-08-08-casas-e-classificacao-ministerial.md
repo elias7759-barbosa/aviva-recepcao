@@ -279,4 +279,3 @@ Na planilha, todo menor deve ter `envio_automatico_permitido=NAO`; a ficha não 
 - [ ] **Step 6: Produzir relatório final**
 
 Incluir screenshots, hashes, contagens, resultados de testes, URLs públicas sem segredos e `verificado: false` para FileVault, 2FA ou aparelho futuro que ainda não tenha sido conferido.
-

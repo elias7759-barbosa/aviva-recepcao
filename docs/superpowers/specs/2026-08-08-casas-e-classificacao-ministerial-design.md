@@ -1,7 +1,7 @@
 # Design — Casas, familiares e classificação ministerial
 
-**Projeto:** Terminal de Recepção Bem-vindos — Aviva Church  
-**Data:** 08/ago/2026  
+**Projeto:** Terminal de Recepção Bem-vindos — Aviva Church
+**Data:** 08/ago/2026
 **Estado:** aguardando revisão final do Pastor antes da implementação
 
 ## 1. Objetivo
