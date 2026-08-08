@@ -11,8 +11,9 @@ const checks = [
     assert.match(html, /value="JOVEM_CASADO"/);
     assert.match(html, /value="CASADO"/);
   }],
-  ['classificação ministerial entra no payload', () => {
-    assert.match(html, /classificacao_ministerial/);
+  ['classificação organizacional entra no payload', () => {
+    assert.match(html, /classificacao_organizacional/);
+    assert.doesNotMatch(html, /Classificação ministerial/);
   }],
   ['família usa integrantes_familia e não membros_familia', () => {
     assert.match(html, /integrantes_familia/);
@@ -33,6 +34,15 @@ const checks = [
   ['consentimento informa telefone opcional dos menores e usa nova versão', () => {
     assert.match(html, /PT-v5-2026-08/);
     assert.match(html, /nome, a idade e o telefone opcional dos menores/i);
+  }],
+  ['selo da sede é um botão de troca operacional', () => {
+    assert.match(html, /id="sede-badge"[^>]*type="button"/);
+  }],
+  ['ordem visual aprovada está preservada', () => {
+    const ids = ['f-nome', 'f-telefone', 'pv-sim', 'f-comuna', 'familia-lista', 'f-email', 'f-categoria', 'f-idioma', 'f-observacoes', 'field-classificacao'];
+    const positions = ids.map(id => html.indexOf(`id="${id}"`));
+    assert.ok(positions.every(n => n >= 0));
+    assert.deepStrictEqual(positions.slice().sort((a,b) => a-b), positions);
   }]
 ];
 

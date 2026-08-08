@@ -872,7 +872,7 @@
     >
       <header class="topbar">
         <div class="topbar-controles">
-          <div class="sede-badge" id="sede-badge">—</div>
+          <button class="sede-badge" id="sede-badge" type="button" title="Mudar sede">—</button>
           <div class="topbar-right">
             <button class="pill-btn" id="btn-fila">
               🕓 <span id="pending-count">0</span> aguardando envio
@@ -965,11 +965,6 @@
               <p class="field-hint" id="phone-hint"></p>
             </div>
 
-            <div class="field" id="field-email">
-              <label for="f-email">E-mail (opcional)</label>
-              <input type="email" id="f-email" autocomplete="off" />
-            </div>
-
             <div class="field" id="field-primeira-visita">
               <label>É a primeira vez que você vem à Aviva Church? *</label>
               <div class="toggle-grupo">
@@ -989,26 +984,6 @@
                 >
                   Não
                 </button>
-              </div>
-            </div>
-
-            <div class="field-row">
-              <div class="field">
-                <label for="f-categoria">Categoria *</label>
-                <select id="f-categoria" required>
-                  <option value="VISITANTE">Visitante</option>
-                  <option value="CONTATO">Contato</option>
-                  <option value="MEMBRO">Membro</option>
-                </select>
-              </div>
-              <div class="field">
-                <label for="f-idioma">Idioma preferido *</label>
-                <select id="f-idioma" required>
-                  <option value="PT">Português</option>
-                  <option value="FR">Français</option>
-                  <option value="NL">Nederlands</option>
-                  <option value="EN">English</option>
-                </select>
               </div>
             </div>
 
@@ -1034,13 +1009,40 @@
               <div id="familia-lista" data-max-idade="17"></div>
             </div>
 
+            <div style="height: 18px" aria-hidden="true"></div>
+
+            <div class="field" id="field-email">
+              <label for="f-email">E-mail (opcional)</label>
+              <input type="email" id="f-email" autocomplete="off" />
+            </div>
+
+            <div class="field-row">
+              <div class="field">
+                <label for="f-categoria">Categoria *</label>
+                <select id="f-categoria" required>
+                  <option value="VISITANTE">Visitante</option>
+                  <option value="CONTATO">Contato</option>
+                  <option value="MEMBRO">Membro</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="f-idioma">Idioma preferido *</label>
+                <select id="f-idioma" required>
+                  <option value="PT">Português</option>
+                  <option value="FR">Français</option>
+                  <option value="NL">Nederlands</option>
+                  <option value="EN">English</option>
+                </select>
+              </div>
+            </div>
+
             <div class="field" style="margin-bottom: 0">
               <label for="f-observacoes">Observações (opcional)</label>
               <textarea id="f-observacoes"></textarea>
             </div>
 
             <div class="field" id="field-classificacao">
-              <label>Classificação ministerial *</label>
+              <label>Classificação organizacional *</label>
               <div class="classificacao-opcoes">
                 <button type="button" class="toggle-btn classificacao-btn" data-value="JOVEM" value="JOVEM">Jovem</button>
                 <button type="button" class="toggle-btn classificacao-btn" data-value="JOVEM_CASADO" value="JOVEM_CASADO">Jovem casado</button>
@@ -1282,13 +1284,11 @@
             { id: "bruxelas", nome: "Bruxelas" },
             { id: "namur", nome: "Namur" },
             { id: "antuerpia", nome: "Antuérpia" },
-            { id: "luxemburgo", nome: "Luxemburgo" },
           ],
           SEDE_PREFIXOS: {
             bruxelas: "BXL",
             namur: "NAM",
             antuerpia: "ANT",
-            luxemburgo: "LUX",
           },
 
           COMUNAS_FONTE: COMUNAS_FONTE,
@@ -1547,7 +1547,7 @@
             consentimentoVersaoExibida: "consentimento_versao_exibida",
             observacoes: "observacoes",
             idFamiliaCliente: "id_familia_cliente",
-            classificacaoMinisterial: "classificacao_ministerial",
+            classificacaoOrganizacional: "classificacao_organizacional",
             integrantesFamilia: "integrantes_familia",
           },
 
@@ -2362,7 +2362,7 @@
         }
 
         var familia = criarGerenciadorFamilia("familia-lista");
-        var classificacaoMinisterialValor = "";
+        var classificacaoOrganizacionalValor = "";
 
         function formularioValido() {
           if (!$("consent-maioridade").checked) {
@@ -2386,7 +2386,7 @@
           if (!$("f-idioma").value) {
             return false;
           }
-          if (!classificacaoMinisterialValor) {
+          if (!classificacaoOrganizacionalValor) {
             return false;
           }
           var comuna = $("f-comuna").value;
@@ -2420,7 +2420,7 @@
           $("form-fields").disabled = true;
           $("f-telefone").value = CONFIG.TELEFONE_PADRAO + " ";
           primeiraVisitaValor = "";
-          classificacaoMinisterialValor = "";
+          classificacaoOrganizacionalValor = "";
           Array.prototype.forEach.call(document.querySelectorAll(".classificacao-btn"), function (btn) {
             btn.classList.remove("ativo");
           });
@@ -2466,7 +2466,7 @@
             idioma: $("f-idioma").value,
             categoria: $("f-categoria").value,
             primeiraVisita: primeiraVisitaValor,
-            classificacaoMinisterial: classificacaoMinisterialValor,
+            classificacaoOrganizacional: classificacaoOrganizacionalValor,
             observacoes: observacoesFinal,
             sedeNome: sede ? sede.nome : "",
             familia: familia.getValidas(),
@@ -2491,8 +2491,8 @@
             "<dt>Categoria</dt><dd>" +
             escapeHtml(rascunhoAtual.categoria) +
             "</dd>" +
-            "<dt>Classificação ministerial</dt><dd>" +
-            escapeHtml(rascunhoAtual.classificacaoMinisterial) +
+            "<dt>Classificação organizacional</dt><dd>" +
+            escapeHtml(rascunhoAtual.classificacaoOrganizacional) +
             "</dd>" +
             "<dt>Comuna de residência</dt><dd>" +
             escapeHtml(rascunhoAtual.comuna) +
@@ -2546,7 +2546,7 @@
           payload[F.consentimentoVersaoExibida] = CONFIG.CONSENT.versao;
           payload[F.observacoes] = rascunhoAtual.observacoes;
           payload[F.idFamiliaCliente] = uuidv4();
-          payload[F.classificacaoMinisterial] = rascunhoAtual.classificacaoMinisterial;
+          payload[F.classificacaoOrganizacional] = rascunhoAtual.classificacaoOrganizacional;
           // Membros da Família: array {nome, idade_declarada} dentro do
           // MESMO POST (contrato §2-bis, reescrito 06/ago) — não é um
           // cadastro/endpoint separado.
@@ -2988,7 +2988,7 @@
 
           Array.prototype.forEach.call(document.querySelectorAll(".classificacao-btn"), function (btn) {
             btn.addEventListener("click", function () {
-              classificacaoMinisterialValor = btn.getAttribute("data-value");
+              classificacaoOrganizacionalValor = btn.getAttribute("data-value");
               Array.prototype.forEach.call(document.querySelectorAll(".classificacao-btn"), function (outro) {
                 outro.classList.toggle("ativo", outro === btn);
               });
@@ -3028,6 +3028,11 @@
           // -------- Configurações --------
           $("btn-settings").addEventListener("click", function () {
             renderSedeBadge();
+            mostrarModal("modal-settings");
+          });
+          $("sede-badge").addEventListener("click", function () {
+            renderSedeBadge();
+            $("settings-sede-select").value = getSedeAtualId();
             mostrarModal("modal-settings");
           });
           $("btn-settings-fechar").addEventListener("click", function () {
