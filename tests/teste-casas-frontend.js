@@ -29,6 +29,10 @@ const checks = [
   }],
   ['frontend reage ao código canônico de token revogado', () => {
     assert.match(html, /data\.erro === "TERMINAL_NAO_AUTORIZADO"/);
+  }],
+  ['consentimento informa telefone opcional dos menores e usa nova versão', () => {
+    assert.match(html, /PT-v5-2026-08/);
+    assert.match(html, /nome, a idade e o telefone opcional dos menores/i);
   }]
 ];
 
