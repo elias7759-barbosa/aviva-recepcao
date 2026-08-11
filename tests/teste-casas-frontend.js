@@ -98,8 +98,13 @@ const checks = [
     assert.match(html, /class="brand-landmark brand-landmark-citadelle"/);
     assert.match(html, /class="paper-tear paper-tear-top"/);
     assert.match(html, /class="brand-brush brand-brush-blue"/);
-    assert.match(html, /class="brand-brush brand-brush-rubrica"/);
     assert.match(html, /\.brand-stage-sede\s*\{[\s\S]*margin-top:\s*24px/);
+  }],
+  ['equilíbrio editorial remove ruído sem empobrecer a identidade', () => {
+    assert.doesNotMatch(html, /class="brand-brush brand-brush-rubrica"/);
+    assert.doesNotMatch(html, /class="sede-visual-lampiao"/);
+    assert.match(html, /\.brand-stage::before,\s*\.brand-stage::after\s*\{\s*display:\s*none/);
+    assert.match(html, /\.brand-brush-blue\s*\{[\s\S]*opacity:\s*\.48/);
   }],
   ['identidade monumental acompanha a sede selecionada', () => {
     assert.match(html, /id="sede-visual-bruxelas"/);
@@ -110,8 +115,6 @@ const checks = [
     assert.match(html, /setAttribute\("data-sede-visual", sede \? sede\.id : ""\)/);
     assert.match(html, /assets\/aviva-lampiao-chama-720\.png/);
     assert.match(html, /\.brand-stage-lamp\s*\{[\s\S]*bottom:\s*-154px[\s\S]*left:\s*-92px[\s\S]*aviva-lampiao-chama-720\.png/);
-    assert.match(html, /\.sede-visual-lampiao\s*\{[\s\S]*left:\s*-132px[\s\S]*opacity:\s*\.72/);
-    assert.match(html, /@media \(max-width: 760px\)[\s\S]*\.sede-visual-lampiao\s*\{[\s\S]*left:\s*-96px[\s\S]*opacity:\s*\.74/);
   }]
 ];
 
