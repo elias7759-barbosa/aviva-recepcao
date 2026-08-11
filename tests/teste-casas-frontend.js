@@ -79,14 +79,15 @@ const checks = [
     assert.match(html, /--id-rubrica:\s*#A8402C/i);
     assert.match(html, /assets\/aviva-lampiao-marfinho-180x180\.png/);
   }],
-  ['nova identidade cria uma abertura editorial com azul, rubrica e lampião', () => {
+  ['topo contém somente lampião e Aviva Church', () => {
     const abertura = html.indexOf('class="brand-stage"');
     const ficha = html.indexOf('<main class="content">');
     assert.ok(abertura >= 0 && abertura < ficha);
-    assert.match(html, /class="brand-stage-sede"/);
-    assert.match(html, /class="brand-stage-rubrica"/);
-    assert.match(html, /\.brand-stage[\s\S]*var\(--id-azul\)/);
-    assert.match(html, /\.brand-stage[\s\S]*var\(--id-rubrica\)/);
+    assert.match(html, /<p class="brand-stage-word">AVIVA <span>CHURCH<\/span><\/p>/);
+    assert.match(html, /class="brand-stage-lamp"/);
+    assert.doesNotMatch(html, /class="brand-stage-sede"/);
+    assert.doesNotMatch(html, /class="brand-stage-rubrica"/);
+    assert.doesNotMatch(html, /class="brand-stage-caption"/);
   }],
   ['configuração inicial recebe a mesma linguagem editorial', () => {
     assert.match(html, /\.setup-card::before/);
@@ -95,24 +96,23 @@ const checks = [
   }],
   ['abertura editorial se reorganiza para a ficha vertical', () => {
     const mobile = html.match(/@media \(max-width: 540px\) \{([\s\S]*?)\n      \}/g);
-    assert.ok(mobile && mobile.some(rule => /\.brand-stage-rubrica\s*\{[\s\S]*margin/.test(rule)));
+    assert.ok(mobile && mobile.some(rule => /\.brand-stage\s*\{[\s\S]*min-height:\s*126px/.test(rule)));
     assert.ok(mobile && mobile.some(rule => /\.topbar-controles\s*\{[\s\S]*gap/.test(rule)));
     assert.ok(mobile && mobile.some(rule => /\.content\s*\{[\s\S]*box-shadow:\s*none/.test(rule)));
   }],
-  ['versão profissional usa território, papel rasgado e pinceladas', () => {
+  ['versão profissional usa o território da sede atrás do cadastro', () => {
     assert.match(html, /assets\/landmarks\/atomium-gravura\.jpg/);
     assert.match(html, /assets\/landmarks\/citadelle-namur-gravura\.jpg/);
-    assert.match(html, /class="brand-landmark brand-landmark-atomium"/);
-    assert.match(html, /class="brand-landmark brand-landmark-citadelle"/);
-    assert.match(html, /class="paper-tear paper-tear-top"/);
-    assert.match(html, /class="brand-brush brand-brush-blue"/);
-    assert.match(html, /\.brand-stage-sede\s*\{[\s\S]*margin-top:\s*24px/);
+    assert.match(html, /id="sede-visual-bruxelas"/);
+    assert.match(html, /id="sede-visual-namur"/);
   }],
-  ['equilíbrio editorial remove ruído sem empobrecer a identidade', () => {
-    assert.doesNotMatch(html, /class="brand-brush brand-brush-rubrica"/);
+  ['equilíbrio editorial remove apresentação e ornamentos repetidos', () => {
+    assert.doesNotMatch(html, /class="brand-brush/);
+    assert.doesNotMatch(html, /class="paper-tear/);
+    assert.doesNotMatch(html, /class="brand-landmark/);
     assert.doesNotMatch(html, /class="sede-visual-lampiao"/);
-    assert.match(html, /\.brand-stage::before,\s*\.brand-stage::after\s*\{\s*display:\s*none/);
-    assert.match(html, /\.brand-brush-blue\s*\{[\s\S]*opacity:\s*\.48/);
+    assert.match(html, /\.content > \.page-title,\s*\.content > \.page-sub\s*\{\s*display:\s*none/);
+    assert.match(html, /\.content\s*\{\s*padding-top:\s*232px/);
   }],
   ['identidade monumental acompanha a sede selecionada', () => {
     assert.match(html, /id="sede-visual-bruxelas"/);
@@ -122,7 +122,7 @@ const checks = [
     assert.match(html, /data-sede-visual/);
     assert.match(html, /setAttribute\("data-sede-visual", sede \? sede\.id : ""\)/);
     assert.match(html, /assets\/aviva-lampiao-chama-720\.png/);
-    assert.match(html, /\.brand-stage-lamp\s*\{[\s\S]*bottom:\s*-154px[\s\S]*left:\s*-92px[\s\S]*aviva-lampiao-chama-720\.png/);
+    assert.match(html, /\.brand-stage-lamp\s*\{[\s\S]*width:\s*132px[\s\S]*aviva-lampiao-chama-720\.png/);
   }]
 ];
 

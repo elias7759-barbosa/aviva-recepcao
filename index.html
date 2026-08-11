@@ -1489,6 +1489,56 @@
       @media (max-width: 760px) {
         .brand-brush-blue { top: 98px; left: -5%; width: 52%; height: 40px; }
       }
+
+      /* Cabeçalho final: somente a marca; o território começa no cadastro. */
+      .brand-stage {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 22px;
+        min-height: 176px;
+        padding: 18px 24px;
+        border-bottom: 3px solid var(--id-rubrica);
+      }
+      .brand-stage-lamp {
+        position: relative;
+        inset: auto;
+        flex: 0 0 auto;
+        width: 132px;
+        height: 132px;
+        background: url("assets/aviva-lampiao-chama-720.png") center / contain no-repeat;
+        transform: none;
+      }
+      .brand-stage-word {
+        margin: 0;
+        color: var(--id-pergaminho);
+        font-size: clamp(3.3rem, 7vw, 6rem);
+        line-height: .72;
+        text-align: left;
+        text-shadow: none;
+      }
+      .brand-stage-word span {
+        display: block;
+        margin-top: 14px;
+        font-family: Arial, sans-serif;
+        font-size: .23em;
+        font-weight: 900;
+        letter-spacing: .38em;
+        line-height: 1;
+      }
+      @media (max-width: 540px) {
+        .brand-stage { gap: 13px; min-height: 126px; padding: 10px 14px; }
+        .brand-stage-lamp { width: 94px; height: 94px; }
+        .brand-stage-word { font-size: clamp(2.8rem, 15vw, 4.2rem); }
+        .brand-stage-word span { margin-top: 10px; letter-spacing: .28em; }
+      }
+      .content { padding-top: 232px; }
+      .content > .page-title,
+      .content > .page-sub { display: none; }
+      .consent-box { margin-top: 0; }
+      @media (max-width: 760px) {
+        .content { padding-top: 184px; }
+      }
     </style>
   </head>
   <body>
@@ -1640,25 +1690,10 @@
         </p>
       </header>
 
-      <section class="brand-stage" aria-label="Acolhimento Aviva Church">
-        <span class="brand-brush brand-brush-blue" aria-hidden="true"></span>
-        <figure class="brand-landmark brand-landmark-atomium" aria-hidden="true">
-          <img src="assets/landmarks/atomium-gravura.jpg" alt="" decoding="async" />
-          <figcaption>Bruxelas / Bélgica</figcaption>
-        </figure>
-        <figure class="brand-landmark brand-landmark-citadelle" aria-hidden="true">
-          <img src="assets/landmarks/citadelle-namur-gravura.jpg" alt="" decoding="async" />
-          <figcaption>Namur / Bélgica</figcaption>
-        </figure>
-        <p class="brand-stage-sede">Aviva Church / Recepção</p>
-        <p class="brand-stage-word">Aviva</p>
-        <p class="brand-stage-rubrica">Bem-vindos</p>
-        <p class="brand-stage-caption">A sua história tem lugar à mesa.</p>
+      <section class="brand-stage" aria-label="Aviva Church">
         <div class="brand-stage-lamp" aria-hidden="true"></div>
-        <div class="brand-stage-flame" aria-hidden="true"></div>
+        <p class="brand-stage-word">AVIVA <span>CHURCH</span></p>
       </section>
-
-      <div class="paper-tear paper-tear-top" aria-hidden="true"></div>
 
       <img
         class="marca-dagua"
@@ -1829,8 +1864,6 @@
           </fieldset>
         </form>
       </main>
-      <div class="paper-tear paper-tear-bottom" aria-hidden="true"></div>
-
       <footer class="footer-status">
         <span class="status-dot" id="net-status-dot">●</span>
         <span id="net-status-text">Verificando conexão…</span>
