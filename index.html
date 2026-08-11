@@ -1117,7 +1117,7 @@
       html, body, #screen-main { background: var(--id-tinta); }
       #screen-main { min-height: 100vh; }
       body.modo-preview #screen-main::before {
-        content: "PRÉVIA VISUAL · CADASTRO DESATIVADO";
+        content: "PRÉVIA INTERATIVA · ENVIO DESATIVADO";
         position: relative;
         z-index: 120;
         display: block;
@@ -1128,6 +1128,10 @@
         font-weight: 900;
         letter-spacing: .14em;
         text-align: center;
+      }
+      body.modo-preview #btn-fila,
+      body.modo-preview #btn-settings {
+        display: none;
       }
       .topbar {
         width: 100%;
@@ -3258,6 +3262,10 @@
         }
 
         function atualizarEstadoSubmit() {
+          if (getPreviewSedeId()) {
+            $("btn-submit").disabled = true;
+            return;
+          }
           $("btn-submit").disabled = !formularioValido();
         }
 
@@ -3886,6 +3894,13 @@
             mostrarModal("modal-settings");
           });
           $("sede-badge").addEventListener("click", function () {
+            if (getPreviewSedeId()) {
+              window.location.search =
+                getPreviewSedeId() === "bruxelas"
+                  ? "preview=namur"
+                  : "preview=bruxelas";
+              return;
+            }
             if (sedeEstaTravada()) {
               return;
             }
@@ -3902,16 +3917,9 @@
           if (getPreviewSedeId()) {
             document.body.classList.add("modo-preview");
             iniciarTelaPrincipal();
-            Array.prototype.forEach.call(
-              document.querySelectorAll(
-                "#screen-main input, #screen-main select, #screen-main textarea, #screen-main button",
-              ),
-              function (controle) {
-                controle.disabled = true;
-              },
-            );
+            $("btn-submit").disabled = true;
             $("sync-endpoint-status").textContent =
-              "Modo prévia: nenhum cadastro será salvo ou enviado";
+              "Modo prévia interativa: nenhum cadastro será salvo ou enviado";
             return;
           }
 
