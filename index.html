@@ -1116,6 +1116,19 @@
          ===================================================================== */
       html, body, #screen-main { background: var(--id-tinta); }
       #screen-main { min-height: 100vh; }
+      body.modo-preview #screen-main::before {
+        content: "PRÉVIA VISUAL · CADASTRO DESATIVADO";
+        position: relative;
+        z-index: 120;
+        display: block;
+        padding: 9px 16px;
+        color: var(--id-pergaminho);
+        background: var(--id-rubrica);
+        font-size: .72rem;
+        font-weight: 900;
+        letter-spacing: .14em;
+        text-align: center;
+      }
       .topbar {
         width: 100%;
         background: var(--id-tinta);
@@ -2487,6 +2500,16 @@
             : "principal";
         }
 
+        function getPreviewSedeId() {
+          if (window.location.search.indexOf("preview=namur") !== -1) {
+            return "namur";
+          }
+          if (window.location.search.indexOf("preview=bruxelas") !== -1) {
+            return "bruxelas";
+          }
+          return "";
+        }
+
         function sedeEstaTravada() {
           return getModoTerminal() === "antuerpia";
         }
@@ -2540,6 +2563,10 @@
   ===================================================================== */
 
         function getSedeAtualId() {
+          var previewSedeId = getPreviewSedeId();
+          if (previewSedeId) {
+            return previewSedeId;
+          }
           if (sedeEstaTravada()) {
             return "antuerpia";
           }
@@ -2557,6 +2584,9 @@
         }
 
         function getDispositivoId() {
+          if (getPreviewSedeId()) {
+            return "PREVIA";
+          }
           // Sem mais "DEVICE_LABEL" de arquivo (07/ago/2026) — o rótulo é
           // sempre gerado sozinho e fixado neste navegador, visível em
           // Configurações (⚙) a qualquer momento.
@@ -3833,6 +3863,24 @@
           $("btn-settings-fechar").addEventListener("click", function () {
             esconderModal("modal-settings");
           });
+
+          // Prévia pública: mostra a identidade completa sem guardar sede,
+          // ativar aparelho, aceitar dados pessoais ou iniciar sincronização.
+          if (getPreviewSedeId()) {
+            document.body.classList.add("modo-preview");
+            iniciarTelaPrincipal();
+            Array.prototype.forEach.call(
+              document.querySelectorAll(
+                "#screen-main input, #screen-main select, #screen-main textarea, #screen-main button",
+              ),
+              function (controle) {
+                controle.disabled = true;
+              },
+            );
+            $("sync-endpoint-status").textContent =
+              "Modo prévia: nenhum cadastro será salvo ou enviado";
+            return;
+          }
 
           // -------- Rede / sincronização periódica --------
           window.addEventListener("online", function () {

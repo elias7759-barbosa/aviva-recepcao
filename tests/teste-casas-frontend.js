@@ -50,6 +50,14 @@ const checks = [
     assert.match(html, /return CONFIG\.SEDES\.filter/);
     assert.match(html, /sede\.id !== "antuerpia"/);
   }],
+  ['prévia pública mostra a identidade sem ativar nem cadastrar', () => {
+    assert.match(html, /function getPreviewSedeId\(\)/);
+    assert.match(html, /preview=namur/);
+    assert.match(html, /preview=bruxelas/);
+    assert.match(html, /document\.body\.classList\.add\("modo-preview"\)/);
+    assert.match(html, /#screen-main input, #screen-main select, #screen-main textarea, #screen-main button/);
+    assert.match(html, /return "PREVIA"/);
+  }],
   ['modo Antuérpia é detectado pela URL e trava a sede', () => {
     assert.match(html, /terminal=antuerpia/);
     assert.match(html, /function sedeEstaTravada\(\)/);
