@@ -108,6 +108,12 @@ const checks = [
     assert.match(html, /id="sede-visual-bruxelas"/);
     assert.match(html, /id="sede-visual-namur"/);
   }],
+  ['Citadelle é reenquadrada antes da ficha em panorama e celular', () => {
+    assert.match(html, /class="sede-visual-citadelle-crop"/);
+    assert.match(html, /\.sede-visual-citadelle-crop\s*\{[\s\S]*?overflow:\s*hidden[\s\S]*?background-image:\s*url\("assets\/landmarks\/citadelle-namur-gravura\.jpg"\)[\s\S]*?background-position:\s*center 48%/);
+    assert.match(html, /#sede-visual-namur \.sede-visual-citadelle-crop \.sede-visual-monumento\s*\{[\s\S]*?display:\s*none/);
+    assert.match(html, /@media \(max-width: 760px\)[\s\S]*?\.sede-visual-citadelle-crop\s*\{[\s\S]*?height:\s*178px[\s\S]*?background-position:\s*center 52%/);
+  }],
   ['equilíbrio editorial remove apresentação e ornamentos repetidos', () => {
     assert.doesNotMatch(html, /class="brand-brush/);
     assert.doesNotMatch(html, /class="paper-tear/);

@@ -1436,6 +1436,23 @@
         width: min(78%, 860px);
         transform: rotate(-1deg) scale(1.06);
       }
+      .sede-visual-citadelle-crop {
+        position: absolute;
+        z-index: 2;
+        top: 32px;
+        right: -2%;
+        width: min(82%, 920px);
+        height: 238px;
+        overflow: hidden;
+        background-image: url("assets/landmarks/citadelle-namur-gravura.jpg");
+        background-position: center 48%;
+        background-repeat: no-repeat;
+        background-size: cover;
+        opacity: .82;
+      }
+      #sede-visual-namur .sede-visual-citadelle-crop .sede-visual-monumento {
+        display: none;
+      }
       .sede-visual-coordenadas {
         position: absolute;
         z-index: 3;
@@ -1475,6 +1492,15 @@
         .sede-visual-nome::after { bottom: -12px; height: 38px; }
         .sede-visual-monumento { top: 70px; right: -35%; width: 128%; opacity: .48; transform: rotate(1deg) scale(1.05); }
         #sede-visual-namur .sede-visual-monumento { top: 82px; right: -32%; width: 126%; }
+        .sede-visual-citadelle-crop {
+          top: 38px;
+          right: -18px;
+          width: calc(100% + 36px);
+          height: 178px;
+          background-position: center 52%;
+          background-size: cover;
+          opacity: .78;
+        }
         .sede-visual-coordenadas { top: 155px; right: 4px; font-size: .52rem; }
         .content > .page-title { font-size: clamp(3.1rem, 16vw, 4.6rem); }
       }
@@ -1714,7 +1740,9 @@
           </section>
           <section class="sede-visual" id="sede-visual-namur">
             <span class="sede-visual-nome">NAMUR</span>
-            <img class="sede-visual-monumento" src="assets/landmarks/citadelle-namur-gravura.jpg" alt="" decoding="async" />
+            <span class="sede-visual-citadelle-crop">
+              <img class="sede-visual-monumento" src="assets/landmarks/citadelle-namur-gravura.jpg" alt="" decoding="async" />
+            </span>
             <span class="sede-visual-coordenadas">50.4674° N · 4.8718° E</span>
           </section>
         </div>
