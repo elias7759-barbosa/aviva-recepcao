@@ -56,6 +56,9 @@ const checks = [
     assert.match(html, /antuerpia:\s*"TERMINAL-ANT-01"/);
     assert.doesNotMatch(html, /uuidv4\(\)\.slice\(0, 4\)\.toUpperCase\(\)/);
   }],
+  ['fila antiga recebe o dispositivo oficial antes de reenviar', () => {
+    assert.match(html, /rec\.payload\[CONFIG\.FIELDS\.dispositivoId\]\s*=\s*getDispositivoId\(\)/);
+  }],
   ['prévia pública é interativa sem ativar nem cadastrar', () => {
     assert.match(html, /function getPreviewSedeId\(\)/);
     assert.match(html, /preview=namur/);

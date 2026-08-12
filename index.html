@@ -3510,6 +3510,12 @@
           var lista = getPendentes();
           for (var i = 0; i < lista.length; i++) {
             var rec = lista[i];
+            // Migração recuperável: filas criadas pela versão que gerava um
+            // dispositivo aleatório precisam usar o identificador oficial
+            // desta sede antes do próximo reenvio. O UUID e todo o restante
+            // do payload permanecem iguais, preservando a idempotência.
+            rec.payload[CONFIG.FIELDS.dispositivoId] = getDispositivoId();
+            await persistirPendentesCifrados();
             if (emVoo[rec._uuid]) {
               continue;
             }
