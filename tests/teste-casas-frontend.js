@@ -72,6 +72,11 @@ const checks = [
     assert.match(html, /getPreviewSedeId\(\) === "bruxelas"[\s\S]*?"preview=namur"[\s\S]*?"preview=bruxelas"/);
     assert.match(html, /return "PREVIA"/);
   }],
+  ['prévia oculta a configuração antes da primeira pintura', () => {
+    assert.match(html, /documentElement\.className \+= " aviva-preview-inicial"/);
+    assert.match(html, /html\.aviva-preview-inicial #screen-setup\s*\{\s*display:\s*none\s*!important/);
+    assert.match(html, /html\.aviva-preview-inicial #screen-main\s*\{\s*display:\s*block\s*!important/);
+  }],
   ['modo Antuérpia é detectado pela URL e trava a sede', () => {
     assert.match(html, /terminal=antuerpia/);
     assert.match(html, /function sedeEstaTravada\(\)/);

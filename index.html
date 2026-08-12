@@ -4,6 +4,13 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Aviva Church — Bem-vindos (Recepção)</title>
+    <script>
+      // Antes da primeira pintura: evita mostrar por um instante a tela de
+      // ativação quando a URL já pediu uma prévia pública de sede.
+      if (/[?&]preview=(bruxelas|namur)(?:&|$)/i.test(location.search)) {
+        document.documentElement.className += " aviva-preview-inicial";
+      }
+    </script>
     <style>
       /* =====================================================================
      AVIVA CHURCH — TERMINAL DE RECEPÇÃO "BEM-VINDOS"
@@ -79,6 +86,14 @@
 
       * {
         box-sizing: border-box;
+      }
+
+      html.aviva-preview-inicial #screen-setup {
+        display: none !important;
+      }
+
+      html.aviva-preview-inicial #screen-main {
+        display: block !important;
       }
 
       html,
