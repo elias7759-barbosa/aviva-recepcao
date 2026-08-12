@@ -2652,19 +2652,21 @@
           if (getPreviewSedeId()) {
             return "PREVIA";
           }
-          // Sem mais "DEVICE_LABEL" de arquivo (07/ago/2026) — o rótulo é
-          // sempre gerado sozinho e fixado neste navegador, visível em
-          // Configurações (⚙) a qualquer momento.
-          var salvo = localStorage.getItem(CONFIG.STORAGE_KEYS.DISPOSITIVO_ID);
-          if (salvo) {
-            return salvo;
-          }
-          var sede = getSedeById(getSedeAtualId());
-          var prefixo = sede ? CONFIG.SEDE_PREFIXOS[sede.id] : "XXX";
-          var gerado =
-            "TERMINAL-" + prefixo + "-" + uuidv4().slice(0, 4).toUpperCase();
-          localStorage.setItem(CONFIG.STORAGE_KEYS.DISPOSITIVO_ID, gerado);
-          return gerado;
+          // O backend autoriza um identificador oficial por sede. Versões
+          // anteriores criavam um sufixo aleatório, que nunca podia coincidir
+          // com o mapa TERMINAL_TOKENS_JSON e deixava toda ficha presa na fila.
+          var sedeId = getSedeAtualId();
+          var oficiais = {
+            bruxelas: "TERMINAL-BXL-01",
+            namur: "TERMINAL-NAM-01",
+            antuerpia: "TERMINAL-ANT-01",
+          };
+          var dispositivoId = oficiais[sedeId] || "TERMINAL-NAO-CONFIGURADO";
+          localStorage.setItem(
+            CONFIG.STORAGE_KEYS.DISPOSITIVO_ID,
+            dispositivoId,
+          );
+          return dispositivoId;
         }
 
         /* =====================================================================

@@ -50,6 +50,12 @@ const checks = [
     assert.match(html, /return CONFIG\.SEDES\.filter/);
     assert.match(html, /sede\.id !== "antuerpia"/);
   }],
+  ['cada sede usa o dispositivo oficial autorizado pelo backend', () => {
+    assert.match(html, /bruxelas:\s*"TERMINAL-BXL-01"/);
+    assert.match(html, /namur:\s*"TERMINAL-NAM-01"/);
+    assert.match(html, /antuerpia:\s*"TERMINAL-ANT-01"/);
+    assert.doesNotMatch(html, /uuidv4\(\)\.slice\(0, 4\)\.toUpperCase\(\)/);
+  }],
   ['prévia pública é interativa sem ativar nem cadastrar', () => {
     assert.match(html, /function getPreviewSedeId\(\)/);
     assert.match(html, /preview=namur/);
