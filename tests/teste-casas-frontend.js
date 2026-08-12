@@ -59,6 +59,9 @@ const checks = [
   ['fila antiga recebe o dispositivo oficial antes de reenviar', () => {
     assert.match(html, /rec\.payload\[CONFIG\.FIELDS\.dispositivoId\]\s*=\s*getDispositivoId\(\)/);
   }],
+  ['envio inclui o código do aparelho dentro do payload validado', () => {
+    assert.match(html, /rec\.payload\.terminal_token\s*=\s*CONFIG\.ENDPOINT_TOKEN/);
+  }],
   ['prévia pública é interativa sem ativar nem cadastrar', () => {
     assert.match(html, /function getPreviewSedeId\(\)/);
     assert.match(html, /preview=namur/);

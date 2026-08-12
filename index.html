@@ -3515,6 +3515,7 @@
             // desta sede antes do próximo reenvio. O UUID e todo o restante
             // do payload permanecem iguais, preservando a idempotência.
             rec.payload[CONFIG.FIELDS.dispositivoId] = getDispositivoId();
+            rec.payload.terminal_token = CONFIG.ENDPOINT_TOKEN;
             await persistirPendentesCifrados();
             if (emVoo[rec._uuid]) {
               continue;
