@@ -72,10 +72,10 @@ const checks = [
     assert.match(html, /getPreviewSedeId\(\) === "bruxelas"[\s\S]*?"preview=namur"[\s\S]*?"preview=bruxelas"/);
     assert.match(html, /return "PREVIA"/);
   }],
-  ['prévia oculta a configuração antes da primeira pintura', () => {
-    assert.match(html, /documentElement\.className \+= " aviva-preview-inicial"/);
-    assert.match(html, /html\.aviva-preview-inicial #screen-setup\s*\{\s*display:\s*none\s*!important/);
-    assert.match(html, /html\.aviva-preview-inicial #screen-main\s*\{\s*display:\s*block\s*!important/);
+  ['nenhuma tela operacional aparece antes da inicialização', () => {
+    assert.match(html, /class="screen setup-wrap oculto" id="screen-setup"/);
+    assert.match(html, /class="screen oculto"\s+id="screen-main"/);
+    assert.doesNotMatch(html, /aviva-preview-inicial/);
   }],
   ['modo Antuérpia é detectado pela URL e trava a sede', () => {
     assert.match(html, /terminal=antuerpia/);
