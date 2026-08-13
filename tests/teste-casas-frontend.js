@@ -72,10 +72,22 @@ const checks = [
     assert.match(html, /getPreviewSedeId\(\) === "bruxelas"[\s\S]*?"preview=namur"[\s\S]*?"preview=bruxelas"/);
     assert.match(html, /return "PREVIA"/);
   }],
-  ['nenhuma tela operacional aparece antes da inicialização', () => {
-    assert.match(html, /class="screen setup-wrap oculto" id="screen-setup"/);
-    assert.match(html, /class="screen oculto"\s+id="screen-main"/);
-    assert.doesNotMatch(html, /aviva-preview-inicial/);
+  ['a raiz contém somente a interface oficial, sem página visual antiga', () => {
+    assert.doesNotMatch(html, /id="screen-setup"/);
+    assert.doesNotMatch(html, /class="setup-assinatura"/);
+    assert.doesNotMatch(html, /class="setup-lema"/);
+    assert.doesNotMatch(html, /\.setup-wrap/);
+    assert.doesNotMatch(html, /\.setup-card/);
+    assert.doesNotMatch(html, /\.setup-assinatura/);
+    assert.doesNotMatch(html, /\.setup-lema/);
+    assert.doesNotMatch(html, /topbar-assinatura/);
+    assert.doesNotMatch(html, /topbar-lema/);
+    assert.doesNotMatch(html, /data:image\/png;base64/);
+    assert.match(html, /class="screen"\s+id="screen-main"/);
+    assert.match(html, /id="modal-ativacao"/);
+    assert.match(html, /id="setup-sede-select"/);
+    assert.match(html, /id="setup-endpoint"/);
+    assert.match(html, /id="setup-token"/);
   }],
   ['modo Antuérpia é detectado pela URL e trava a sede', () => {
     assert.match(html, /terminal=antuerpia/);
@@ -108,10 +120,16 @@ const checks = [
     assert.doesNotMatch(html, /class="brand-stage-rubrica"/);
     assert.doesNotMatch(html, /class="brand-stage-caption"/);
   }],
-  ['configuração inicial recebe a mesma linguagem editorial', () => {
-    assert.match(html, /\.setup-card::before/);
-    assert.match(html, /\.setup-lema::before/);
-    assert.match(html, /\.setup-lema::after/);
+  ['ativação acontece sobre a interface aprovada sem substituí-la', () => {
+    assert.match(html, /function mostrarAtivacaoInicial\(\)/);
+    assert.match(html, /mostrarModal\("modal-ativacao"\)/);
+    assert.match(html, /iniciarTelaPrincipal\(\);[\s\S]*?mostrarAtivacaoInicial\(\)/);
+    assert.doesNotMatch(html, /mostrarTelaConfiguracaoInicial/);
+  }],
+  ['primeiro acesso já mostra Bruxelas e acompanha a sede escolhida', () => {
+    assert.match(html, /var sedeVisual = sede \|\| getSedeById\("bruxelas"\)/);
+    assert.match(html, /function renderSedeVisual\(sedeId\)/);
+    assert.match(html, /renderSedeVisual\(\$\("setup-sede-select"\)\.value\)/);
   }],
   ['abertura editorial se reorganiza para a ficha vertical', () => {
     const mobile = html.match(/@media \(max-width: 540px\) \{([\s\S]*?)\n      \}/g);
@@ -145,7 +163,7 @@ const checks = [
     assert.match(html, /class="sede-visual-nome"[^>]*>BRUXELAS</);
     assert.match(html, /class="sede-visual-nome"[^>]*>NAMUR</);
     assert.match(html, /data-sede-visual/);
-    assert.match(html, /setAttribute\("data-sede-visual", sede \? sede\.id : ""\)/);
+    assert.match(html, /function renderSedeVisual\(sedeId\)[\s\S]*?setAttribute\([\s\S]*?"data-sede-visual"/);
     assert.match(html, /assets\/aviva-lampiao-chama-720\.png/);
     assert.match(html, /\.brand-stage-lamp\s*\{[\s\S]*width:\s*132px[\s\S]*aviva-lampiao-chama-720\.png/);
   }]
