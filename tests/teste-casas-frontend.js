@@ -165,9 +165,10 @@ const checks = [
     assert.match(html, /data-sede-visual/);
     assert.match(html, /function renderSedeVisual\(sedeId\)[\s\S]*?setAttribute\([\s\S]*?"data-sede-visual"/);
     assert.match(html, /assets\/aviva-lampiao-fundo-escuro-v1\.png/);
-    assert.match(html, /\.brand-stage\s*\{[\s\S]*gap:\s*10px/);
+    assert.match(html, /\.brand-stage\s*\{[\s\S]*gap:\s*0/);
     assert.match(html, /\.brand-stage-lamp\s*\{[\s\S]*width:\s*148px[\s\S]*aviva-lampiao-fundo-escuro-v1\.png/);
-    assert.match(html, /@media \(max-width:\s*540px\)[\s\S]*\.brand-stage\s*\{\s*gap:\s*6px[\s\S]*\.brand-stage-lamp\s*\{\s*width:\s*106px;\s*height:\s*106px/);
+    assert.match(html, /\.brand-stage-word\s*\{[\s\S]*font-size:\s*clamp\(3\.7rem,\s*8vw,\s*6\.8rem\)/);
+    assert.match(html, /@media \(max-width:\s*540px\)[\s\S]*\.brand-stage\s*\{\s*gap:\s*0[\s\S]*\.brand-stage-lamp\s*\{\s*width:\s*106px;\s*height:\s*106px[\s\S]*\.brand-stage-word\s*\{\s*font-size:\s*clamp\(3\.1rem,\s*16\.5vw,\s*4\.6rem\)/);
   }]
 ];
 
