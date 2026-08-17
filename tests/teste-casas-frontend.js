@@ -164,8 +164,8 @@ const checks = [
     assert.match(html, /class="sede-visual-nome"[^>]*>NAMUR</);
     assert.match(html, /data-sede-visual/);
     assert.match(html, /function renderSedeVisual\(sedeId\)[\s\S]*?setAttribute\([\s\S]*?"data-sede-visual"/);
-    assert.match(html, /assets\/aviva-lampiao-chama-720\.png/);
-    assert.match(html, /\.brand-stage-lamp\s*\{[\s\S]*width:\s*132px[\s\S]*aviva-lampiao-chama-720\.png/);
+    assert.match(html, /assets\/aviva-lampiao-fundo-escuro-v1\.png/);
+    assert.match(html, /\.brand-stage-lamp\s*\{[\s\S]*width:\s*132px[\s\S]*aviva-lampiao-fundo-escuro-v1\.png/);
   }]
 ];
 
